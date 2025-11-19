@@ -2,20 +2,20 @@
 import sys
 import re
 
+stopwords = set()
+with open("inverted_index/stopwords.txt") as f:
+    for w in f:
+        stopwords.add(w.strip())
+
 
 for line in sys.stdin:
-
     line = line.strip()
     if not line:
         continue
- 
-    doc_id, words = line.split("\t", 1)
-
-    
-
-
-
-        words = re.sub(r"[^a-zA-Z0-9 ]+", "", words)
-        for word in words:
-            word = word.str().casefold()
+    doc_id, content = line.split("\t", 1)
+    content = re.sub(r"[^a-zA-Z0-9 ]+", "", words)
+    content = content.casefold()
+    words = content.split()
+    for word in words:
+        if word not in stopwords and word != "":
             print(f"{word}\t{doc_id}\t1")

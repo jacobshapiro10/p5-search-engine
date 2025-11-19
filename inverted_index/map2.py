@@ -13,7 +13,7 @@ for line in sys.stdin:
     if not line:
         continue
     doc_id, content = line.split("\t", 1)
-    content = re.sub(r"[^a-zA-Z0-9 ]+", "", words)
+    content = re.sub(r"[^a-zA-Z0-9 ]+", "", content)
     content = content.casefold()
     words = content.split()
     for word in words:

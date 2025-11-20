@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import math
+"""Reduce 3"""
 
 # Read total document count
 with open("total_document_count.txt") as f:

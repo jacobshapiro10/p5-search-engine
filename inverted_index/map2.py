@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Map 2"""
 import sys
 import re
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import math
+"""Reduce 4"""
 
 my_dict = {}
 

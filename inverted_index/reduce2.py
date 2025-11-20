@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Reduce 2"""
 import sys
 import itertools
 

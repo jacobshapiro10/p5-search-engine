@@ -20,32 +20,78 @@ if [ -n "${1-}" ]; then
   PIPELINE_INPUT="$1"
 fi
 
-# Print commands
-set -x
+set -x   # Print commands
 
-# Remove output directories
-rm -rf output output[0-9]
+# Clean old directories
+rm -rf output output[0-9] combined_input_5 total_document_count.txt
 
-# Job 0: Document Count (this job is not part of the pipeline)
+############################################
+# Job 0 — Count Documents
+############################################
 madoop \
   -input ${PIPELINE_INPUT} \
   -output output0 \
   -mapper ./map0.py \
   -reducer ./reduce0.py
 
-# Copy document count to a separate file
+# Save doc count (used by Reduce 3)
 cp output0/part-00000 total_document_count.txt
 
-# Job 1: Parsing
+
+############################################
+# Job 1 — HTML Parsing → docid \t text
+############################################
 madoop \
   -input ${PIPELINE_INPUT} \
   -output output1 \
   -mapper ./map1.py \
   -reducer ./reduce1.py
 
-# Job 2
+
+############################################
+# Job 2 — term \t docid \t tf_partial
+############################################
 madoop \
   -input output1 \
   -output output2 \
   -mapper ./map2.py \
   -reducer ./reduce2.py
+
+
+############################################
+# Job 3 — Add IDF → term \t docid \t tf \t idf
+############################################
+madoop \
+  -input output2 \
+  -output output3 \
+  -mapper ./map3.py \
+  -reducer ./reduce3.py
+
+
+############################################
+# Job 4 — Compute doc norms → docid \t norm
+############################################
+madoop \
+  -input output3 \
+  -output output4 \
+  -mapper ./map4.py \
+  -reducer ./reduce4.py
+
+
+############################################
+# Job 5 — Needs output3 + output4
+# MUST combine directories manually
+############################################
+rm -rf combined_input_5
+mkdir combined_input_5
+
+cp output3/* combined_input_5/
+cp output4/* combined_input_5/
+
+madoop \
+  -input combined_input_5 \
+  -output output5 \
+  -mapper ./map5.py \
+  -reducer ./reduce5.py
+
+echo "Pipeline complete!"

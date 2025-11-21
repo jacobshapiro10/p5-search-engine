@@ -76,26 +76,15 @@ madoop \
   -output output4 \
   -mapper ./map4.py \
   -reducer ./reduce4.py
-  
+
 
 ############################################
 # Job 5 — Needs output3 + output4
 # MUST combine directories manually
 ############################################
-rm -rf combined_input_5
-mkdir combined_input_5
-
-# Copy output3 files as-is
-rsync -a output3/ combined_input_5/
-
-# Copy output4 files with a prefix to avoid name collision
-for file in output4/part-*; do
-  basename=$(basename "$file")
-  cp "$file" "combined_input_5/norm_${basename}"
-done
 
 madoop \
-  -input combined_input_5 \
+  -input output4 \
   -output output \
   -mapper ./map5.py \
   -reducer ./reduce5.py \

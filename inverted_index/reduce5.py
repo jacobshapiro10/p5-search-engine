@@ -17,13 +17,13 @@ for line in sys.stdin:
     fields = line.split("\t")
 
     # Norm record: docid norm
-    if len(fields) == 2:
-        docid, norm = fields
+    if len(fields) == 3:
+        _, docid, norm = fields
         norms[docid] = norm
 
     # TF-IDF record: term docid tf idf
-    elif len(fields) == 4:
-        term, docid, tf, idf = fields
+    elif len(fields) == 5:
+        _, term, docid, tf, idf = fields
         postings[term].append((docid, tf, idf))
 
 # Output in term-sorted order

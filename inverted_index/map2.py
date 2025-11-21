@@ -4,7 +4,7 @@ import sys
 import re
 
 stopwords = set()
-with open("inverted_index/stopwords.txt") as f:
+with open("stopwords.txt") as f:
     for w in f:
         stopwords.add(w.strip())
 

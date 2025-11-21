@@ -26,7 +26,7 @@ for line in sys.stdin:
 # Output in term-sorted order
 for term in sorted(postings.keys()):
     _, _, idf = postings[term][0]
-    print(f"{term}\t{idf}", end="")
+    print(f"{term} {idf}", end="")
     
     for docid, tf, _ in sorted(postings[term], key=lambda x: x[0]):
         norm = norms.get(docid, "0")

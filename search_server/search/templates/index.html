@@ -1,43 +1,39 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ask485?</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
 </head>
 <body>
-    <div class="feed">.
-
-        <!-- search bar -->
+    <div class="feed">
         <div class="search-container">
             <h1>ask485?</h1>
             <form action="/" method="GET" class="search_bar">
-                <input type="text" name="q" value= "{{ query }}" placeholder="Enter your search here..." autofocus/>
-                <input type="range" name="w" min 0 max 1 step .01 value="{{ weight }}" />
-                <input type="submit" value="Search"/>
+                <input type="text" name="q" placeholder="Enter your search here..." value="{{ query }}" autofocus />
+                <input type="range" name="w" min="0" max="1" step="0.01" value="{{ weight }}" />
+                <input type="submit" value="Search" />
             </form>
         </div>
-        <!-- results -->
         <div class="results">
-            {% if results %}
-                <p>Showing results for "<strong>{{ query }}</strong>" (weight: {{ weight }})</p>
-                <ul>
-                {% for result in results %}
+            {% if documents %}
+                {% for document in documents %}
                     <div class="doc">
-                        <a class="doc_url" href="{{ result.url }}">
-                            {{ result.url | urldecode }}
-                        </a>
-                        <div class="doc_title">{{ result.title }}</div>
-                        <div class="doc_summary">{{ result.summary }}</div>
+                        <div class="doc_title">
+                            <a href="{{ document['url'] }}">{{ document['title'] }}</a>
+                        </div>
+                        <div class="doc_summary">{{ document['summary'] }}</div>
+                        <a class="doc_url" href="{{ document['url'] }}">{{ document['url'] }}</a>
                     </div>
                 {% endfor %}
-                </ul>
             {% else %}
                 <div class="no_results">No search results found!</div>
             {% endif %}
+        </div>
     </div>
 </body>
 </html>

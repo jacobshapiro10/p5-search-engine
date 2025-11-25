@@ -12,22 +12,23 @@
 <body>
     <div class="feed">
         <div class="search-container">
-            <h1>ask485?</h1>
+            <div class="ask485">ask485?</div>
             <form action="/" method="GET" class="search_bar">
                 <input type="text" name="q" placeholder="Enter your search here..." value="{{ query }}" autofocus />
+                <div class="pagerank_weight">PageRank Weight</div>
                 <input type="range" name="w" min="0" max="1" step="0.01" value="{{ weight }}" />
                 <input type="submit" value="Search" />
             </form>
         </div>
-        <div class="results">
+        <div class="docs">
             {% if documents %}
                 {% for document in documents %}
                     <div class="doc">
-                        <div class="doc_title">
-                            <a href="{{ document['url'] }}">{{ document['title'] }}</a>
+                        <div class="doc_title">{{ document['title'] }}</div>
+                        <div class="doc_summary">
+                            {{ document['summary'] if document['summary'] else "No summary available" }}
                         </div>
-                        <div class="doc_summary">{{ document['summary'] }}</div>
-                        <a class="doc_url" href="{{ document['url'] }}">{{ document['url'] }}</a>
+                        <a class="doc_url" href="{{ document['url'] }}">{{ document.url | urldecode }}</a>
                     </div>
                 {% endfor %}
             {% else %}

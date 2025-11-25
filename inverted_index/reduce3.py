@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+"""Reduce 3 to compute IDF and emit (term, docid, tf, IDF)."""
 import sys
 import math
-"""Reduce 3"""
 
 # Read total document count
-with open("total_document_count.txt") as f:
+with open("total_document_count.txt", encoding="utf-8") as f:
     N = int(f.read().strip())
 
 current_term = None

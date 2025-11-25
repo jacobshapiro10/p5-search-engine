@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Reduce 0 to sum up HTML document counts."""
 import sys
 
 total = 0

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Map function to identify HTML documents."""
 import sys
 
 for line in sys.stdin:

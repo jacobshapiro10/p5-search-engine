@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reduce 4"""
+"""Reduce 4 to compute document norms and pass through TF-IDF records."""
 import sys
 import math
 
@@ -10,9 +10,9 @@ for line in sys.stdin:
     line = line.strip()
     if not line:
         continue
-    
+
     fields = line.split("\t")
-    
+
     if len(fields) == 2:
         # It's a norm weight: docid<tab>weight
         doc_id, weight = fields

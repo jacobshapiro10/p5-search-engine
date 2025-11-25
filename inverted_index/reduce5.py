@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reduce 5"""
+"""Reduce 5 to combine norms and postings into final inverted index."""
 import sys
 from collections import defaultdict
 
@@ -27,9 +27,9 @@ for line in sys.stdin:
 for term in sorted(postings.keys()):
     _, _, idf = postings[term][0]
     print(f"{term} {idf}", end="")
-    
+
     for docid, tf, _ in sorted(postings[term], key=lambda x: x[0]):
         norm = norms.get(docid, "0")
         print(f" {docid} {tf} {norm}", end="")
-    
+
     print()

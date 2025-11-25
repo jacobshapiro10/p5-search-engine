@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Map 2"""
+"""Map to create (term, docid, 1) triples."""
 import sys
 import re
 
 stopwords = set()
-with open("stopwords.txt") as f:
+with open("stopwords.txt", encoding="utf-8") as f:
     for w in f:
         stopwords.add(w.strip())
 

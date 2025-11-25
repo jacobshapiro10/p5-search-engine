@@ -1,4 +1,5 @@
 #!/usr/bin/env -S python3 -u
+"""Partition input lines by segment ID."""
 import sys
 
 

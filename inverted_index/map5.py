@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Map 5"""
+"""Map 5 to partition TF-IDF and norm records by segment ID."""
 import sys
 
 for line in sys.stdin:

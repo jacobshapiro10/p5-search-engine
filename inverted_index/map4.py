@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Map 4"""
+"""Map to compute weights and emit for norm calculation."""
 import sys
 
 for line in sys.stdin:
@@ -10,9 +10,9 @@ for line in sys.stdin:
     term_frequency = float(term_frequency)
     idf = float(idf)
     weight = (term_frequency * idf) * (term_frequency * idf)
-    
+
     # Emit for norm calculation
     print(f"{doc_id}\t{weight}")
-    
+
     # Pass through the TF-IDF record unchanged
     print(line)

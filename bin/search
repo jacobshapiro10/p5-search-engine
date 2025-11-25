@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+case "$1" in
+  start)
+    echo "starting search server ..."
+    flask --app search run --host=127.0.0.1 --port=5000 &
+    ;;
+  stop)
+    pkill -f "flask --app search"
+    echo "search server stopped"
+    ;;
+  status)
+    pgrep -f "flask --app search" >/dev/null
+    ;;
+  *)
+    echo "Usage: bin/search {start|stop|status}"
+    exit 1
+    ;;
+esac

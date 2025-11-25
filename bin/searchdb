@@ -5,7 +5,6 @@ Extracts details about each document and adds them to a database.
 
 import pathlib
 import sqlite3
-import sys
 import bs4
 
 def get_summary(soup):
@@ -50,25 +49,42 @@ def build_search_db(input_dir, output_db_path):
         )
     """)
 
-    # Process each inverted index file
-    for index_file in input_dir.glob("*.html"):
-        with index_file.open("r") as f:
-            # for line in f:
-                # parts = line.strip().split('\t')
-                # if len(parts) < 4:
-                #     continue
-                # doc_id, title, url, snippet = parts[0], parts[1], parts[2], parts[3]
+    # Process each crawl HTML file
+    for index_file in sorted(input_dir.glob("*.html")):
+        with index_file.open("r", encoding="utf-8") as f:
             soup = bs4.BeautifulSoup(f.read(), "html.parser")
-            docid = int(soup.find("meta", attrs={"eecs485_docid": True}).get("eecs485_docid"))
-            title = soup.find("title").get_text()[:150]
-            summary = get_summary(soup)
-            url = soup.find("meta", attrs={"eecs485_url": True}).get("eecs485_url")[:150]
-            soup.find("meta", attrs={"eecs485_url": True}).get("eecs485_url")
-            
-            c.execute("""
-                INSERT OR REPLACE INTO documents (docid, title, summary, url)
-                VALUES (?, ?, ?, ?)
-            """, (docid, title, summary, url))
+
+        # docid
+        meta_docid = soup.find("meta", attrs={"eecs485_docid": True})
+        if meta_docid is None or not meta_docid.has_attr("eecs485_docid"):
+            # logging.warning("Skipping %s: missing eecs485_docid meta", index_file)
+            # skipped += 1
+            continue
+        
+        docid = int(meta_docid.get("eecs485_docid"))
+
+        # title
+        title_tag = soup.find("title")
+        if title_tag and title_tag.string:
+            title = title_tag.text.strip()
+        if title.endswith(" - Wikipedia"):
+            title = title[:-len(" - Wikipedia")]
+
+        # summary
+        summary = get_summary(soup)
+
+        # url
+        meta_url = soup.find("meta", attrs={"eecs485_url": True})
+        if meta_url and meta_url.has_attr("eecs485_url"):
+            url = meta_url.get("eecs485_url").strip()[:150]
+        else:
+            url = ""
+
+        # Insert row
+        c.execute("""
+            INSERT OR REPLACE INTO documents (docid, title, summary, url)
+            VALUES (?, ?, ?, ?)
+        """, (docid, title, summary, url))
 
     conn.commit()
     conn.close()

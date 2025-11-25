@@ -1,7 +1,11 @@
-from flask import Blueprint, current_app
+"""Initialization code for the index server API."""
 from pathlib import Path
+
+from flask import Blueprint, current_app
+
 # Create a Blueprint for the API
 api = Blueprint("api", __name__, url_prefix="/api/v1")
+
 
 def load_index():
     """Load inverted index segment, stopwords, and pagerank into memory."""
@@ -11,7 +15,7 @@ def load_index():
     # Load stopwords
     # ----------------------
     stopwords_path = Path(app.root_path) / "stopwords.txt"
-    with open(stopwords_path) as f:
+    with open(stopwords_path, encoding="utf-8") as f:
         stopwords = set(w.strip() for w in f)
     app.config["STOPWORDS"] = stopwords
 
@@ -20,7 +24,7 @@ def load_index():
     # ----------------------
     pagerank_path = Path(app.root_path) / "pagerank.out"
     pagerank = {}
-    with open(pagerank_path) as f:
+    with open(pagerank_path, encoding="utf-8") as f:
         for line in f:
             docid, score = line.strip().split(",")
             pagerank[int(docid)] = float(score)
@@ -30,12 +34,10 @@ def load_index():
     # Load inverted index segment
     # ----------------------
     inverted = {}
-    index_path = Path(app.config["INDEX_PATH"])
 
-    with open(index_path) as f:
+    with open(Path(app.config["INDEX_PATH"]), encoding="utf-8") as f:
         for line in f:
             parts = line.split()
-            term = parts[0]
             idf = float(parts[1])
 
             postings = []
@@ -43,16 +45,14 @@ def load_index():
 
             # postings come in triples: docid, termfreq, norm
             for i in range(0, len(nums), 3):
-                docid = int(nums[i])
-                tf = float(nums[i+1])
-                norm = float(nums[i+2])
-                postings.append((docid, tf, norm))
+                postings.append((int(nums[i]),
+                                 float(nums[i+1]),
+                                 float(nums[i+2])))
 
-            inverted[term] = (idf, postings)
+            inverted[parts[0]] = (idf, postings)
 
     app.config["INVERTED_INDEX"] = inverted
 
 
 # Import routes so they register with the blueprint
-from . import main  # noqa: F401
-
+from . import main  # noqa: E402 pylint: disable=wrong-import-position

@@ -26,29 +26,18 @@
                 <p>Showing results for "<strong>{{ query }}</strong>" (weight: {{ weight }})</p>
                 <ul>
                 {% for result in results %}
-                    <li>
-                        <a href="{{ result.url }}">{{ result.title }}</a><br/>
-                        <span class="url">{{ result.url }}</span><br/>
-                        <span class="snippet">{{ result.snippet }}</span>
-                    </li>
+                    <div class="doc">
+                        <a class="doc_url" href="{{ result.url }}">
+                            {{ result.url | urldecode }}
+                        </a>
+                        <div class="doc_title">{{ result.title }}</div>
+                        <div class="doc_summary">{{ result.summary }}</div>
+                    </div>
                 {% endfor %}
                 </ul>
             {% else %}
-                <p>No results found for "<strong>{{ query }}</strong>" (weight: {{ weight }})</p>
+                <div class="no_results">No search results found!</div>
             {% endif %}
     </div>
 </body>
 </html>
-
-<!-- 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <title>eecs485</title>
-<head>
-<body>
-    <h1>eecs485</h1>
-</body>
-</html> -->

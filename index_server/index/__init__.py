@@ -1,7 +1,11 @@
-from flask import Flask, current_app
-from pathlib import Path
+"""Index server package initializer."""
 import os
-import index.api
+from pathlib import Path
+
+from flask import Flask, current_app
+from index.api import load_index
+
+from .api import api
 
 # Create the Flask app
 app = Flask(__name__)
@@ -15,12 +19,7 @@ app.config["INDEX_PATH"] = os.getenv(
 
 # Load all index data once when the server starts
 with app.app_context():
-    index.api.load_index()
+    load_index()
 
 # REGISTER THE API BLUEPRINT (THIS WAS MISSING)
-from .api import api
 app.register_blueprint(api)
-
-
-
-

@@ -1,14 +1,10 @@
 from flask import jsonify, request, current_app
 from . import api
 
-
 from flask import current_app
 from pathlib import Path
 import math
 import re
-
-
-
 
 # GET /api/v1/
 @api.route("/")
@@ -31,13 +27,13 @@ def api_hits():
     query = request.args.get("q")
     if query is None:
         return jsonify({"error": "missing query parameter q"}), 400
-    else:
-        query = re.sub(r"[^a-zA-Z0-9 ]+", "", query)
-        query = query.casefold()
-        query = query.split()
-        for word in query:
-            if word not in stopwords and word != "":
-                words_to_keep.append(word)
+    
+    query = re.sub(r"[^a-zA-Z0-9 ]+", "", query)
+    query = query.casefold()
+    query = query.split()
+    for word in query:
+        if word not in stopwords and word != "":
+            words_to_keep.append(word)
 
     tf_query = {}
     for term in words_to_keep:
